@@ -62,6 +62,9 @@ async function getListOnBoard(board, list) {
 
 async function addAttachmentToCard(card, link) {
   console.log(`addAttachmentToCard(${card.id}, ${link})`);
+  if (card.attachments && card.attachments.find((attachment) => attachment.url === link )) {
+    return true;
+  }
   let url = `https://api.trello.com/1/cards/${card.id}/attachments`;
   return await axios.post(url, {
     key: trelloApiKey,
