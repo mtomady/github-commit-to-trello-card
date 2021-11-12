@@ -13,11 +13,13 @@ const trelloCardAction = core.getInput('trello-card-action', { required: true })
 const trelloListNameCommit = core.getInput('trello-list-name-commit', { required: false });
 const trelloListNamePullRequestOpen = core.getInput('trello-list-name-pr-open', { required: false });
 const trelloListNamePullRequestClosed = core.getInput('trello-list-name-pr-closed', { required: false });
+const keyPrefix = core.getInput('key-prefix', { required: false });
+const regexCardID = new RegExp(`${keyPrefix}\\d+`, 'g');
 
 function getCardNumber(message) {
   console.log(`getCardNumber(${message})`);
-  let ids = message && message.length > 0 ? message.replace(regexPullRequest, "").match(/\#\d+/g) : [];
-  return ids && ids.length > 0 ? ids[ids.length-1].replace('#', '') : null;
+  let ids = message && message.length > 0 ? message.replace(regexPullRequest, "").match(regexCardID) : [];
+  return ids && ids.length > 0 ? ids[ids.length-1].replace(keyPrefix, '') : null;
 }
 
 async function getCardOnBoard(board, message) {
@@ -133,19 +135,19 @@ async function handlePullRequest(data) {
   let url = data.html_url || data.url;
   let message = data.title;
   let user = data.user.name;
-  let card = await getCardOnBoard(trelloBoardId, message);
-  if (card && card.length > 0) {
+  let cardId = await getCardOnBoard(trelloBoardId, message);
+  if (cardId && cardId.length > 0) {
     if (trelloCardAction && trelloCardAction.toLowerCase() == 'attachment') {
-      await addAttachmentToCard(card, url);
+      await addAttachmentToCard(cardId, url);
     }
     else if (trelloCardAction && trelloCardAction.toLowerCase() == 'comment') {
-      await addCommentToCard(card, user, message, url);
+      await addCommentToCard(cardId, user, message, url);
     }
     if (data.state == "open" && trelloListNamePullRequestOpen && trelloListNamePullRequestOpen.length > 0) {
-      await moveCardToList(trelloBoardId, card, trelloListNamePullRequestOpen);
+      await moveCardToList(trelloBoardId, cardId, trelloListNamePullRequestOpen);
     }
     else if (data.state == "closed" && trelloListNamePullRequestClosed && trelloListNamePullRequestClosed.length > 0) {
-      await moveCardToList(trelloBoardId, card, trelloListNamePullRequestClosed);
+      await moveCardToList(trelloBoardId, cardId, trelloListNamePullRequestClosed);
     }
   }
 }

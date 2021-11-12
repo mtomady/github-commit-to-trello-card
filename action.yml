@@ -26,6 +26,10 @@ inputs:
   trello-list-name-pr-closed:
     description: Trello list name for closed pull request, for example "Testing", "Done", etc
     required: false
+  key-prefix:
+    description: Prefix before Trello card IDs, for example "PROJ-", if you want to refer to cards like "PROJ-242" rather than "#242". Default is "#"
+    required: false
+    default: '#'
 runs:
   using: node12
   main: dist/index.js
