@@ -25,10 +25,10 @@ async function getCardOnBoard(board, message) {
   let card = getCardNumber(message);
   if (card && card.length > 0) {
     let url = `https://trello.com/1/boards/${board}/cards/${card}`
-    return await axios.get(url, { 
-      params: { 
-        key: trelloApiKey, 
-        token: trelloAuthToken 
+    return await axios.get(url, {
+      params: {
+        key: trelloApiKey,
+        token: trelloAuthToken
       }
     }).then(response => {
       return response.data.id;
@@ -43,10 +43,10 @@ async function getCardOnBoard(board, message) {
 async function getListOnBoard(board, list) {
   console.log(`getListOnBoard(${board}, ${list})`);
   let url = `https://trello.com/1/boards/${board}/lists`
-  return await axios.get(url, { 
-    params: { 
-      key: trelloApiKey, 
-      token: trelloAuthToken 
+  return await axios.get(url, {
+    params: {
+      key: trelloApiKey,
+      token: trelloAuthToken
     }
   }).then(response => {
     let result = response.data.find(l => l.closed == false && l.name == list);
@@ -62,7 +62,7 @@ async function addAttachmentToCard(card, link) {
   let url = `https://api.trello.com/1/cards/${card}/attachments`;
   return await axios.post(url, {
     key: trelloApiKey,
-    token: trelloAuthToken, 
+    token: trelloAuthToken,
     url: link
   }).then(response => {
     return response.status == 200;
@@ -77,7 +77,7 @@ async function addCommentToCard(card, user, message, link) {
   let url = `https://api.trello.com/1/cards/${card}/actions/comments`;
   return await axios.post(url, {
     key: trelloApiKey,
-    token: trelloAuthToken, 
+    token: trelloAuthToken,
     text: `${user}: ${message} ${link}`
   }).then(response => {
     return response.status == 200;
@@ -94,7 +94,7 @@ async function moveCardToList(board, card, list) {
     let url = `https://api.trello.com/1/cards/${card}`;
     return await axios.put(url, {
       key: trelloApiKey,
-      token: trelloAuthToken, 
+      token: trelloAuthToken,
       idList: listId
     }).then(response => {
       return response && response.status == 200;
@@ -102,7 +102,7 @@ async function moveCardToList(board, card, list) {
       console.error(url, `Error ${error.response.status} ${error.response.statusText}`);
       return null;
     });
-  }       
+  }
   return null;
 }
 
