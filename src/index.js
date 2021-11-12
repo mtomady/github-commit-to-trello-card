@@ -33,7 +33,7 @@ async function getCardOnBoard(board, message) {
         token: trelloAuthToken
       }
     }).then(response => {
-  console.log("card data: ", response.data);
+  console.log("card Data: ", response.data);
       return response.data;
     }).catch(error => {
       console.error(url, `Error ${error.response.status} ${error.response.statusText}`);
