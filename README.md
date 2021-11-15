@@ -12,6 +12,7 @@
 - **trello-list-name-commit** - Trello list name for new commit, for example "Doing", "In Progress", etc
 - **trello-list-name-pr-open** - Trello list name for open pull request, for example "Reviewing", "In Review", etc
 - **trello-list-name-pr-closed** - Trello list name for closed pull request, for example "Testing", "Done", etc
+- **key-prefix** - Prefix to be used in commit/pull requests in front of Trello card IDs, for example "TECH-", default: "#"
 
 #### Git Commit
 ```
@@ -42,7 +43,8 @@ jobs:
           trello-list-name-commit: "Doing"
           trello-list-name-pr-open: "Reviewing"
           trello-list-name-pr-closed: "Testing"
-```          
+          key-prefix: "TECH-"
+```
 
 #### Local Build
 ```
